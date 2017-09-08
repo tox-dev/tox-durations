@@ -42,36 +42,30 @@ def tox_addoption(parser):
 
 @hookimpl
 def tox_configure(config):
-    global DURATION
     DURATION.enabled = config.option.durations
 
 
 @hookimpl()
 def tox_get_python_executable(envconfig):
-    global DURATION
     DURATION.reports[envconfig.envname].config = DURATION.diff
 
 
 @hookimpl
 def tox_testenv_create(venv, action):
-    global DURATION
     DURATION.reports[venv.name].get_python = DURATION.diff
 
 
 @hookimpl
 def tox_testenv_install_deps(venv, action):
-    global DURATION
     DURATION.reports[venv.name].create_venv = DURATION.diff
 
 
 @hookimpl
 def tox_runtest_pre(venv):
-    global DURATION
     DURATION.reports[venv.name].install_deps = DURATION.diff
 
 
 @hookimpl
 def tox_runtest_post(venv):
     DURATION.reports[venv.name].run_test = DURATION.diff
-
     print('{} => {}'.format(venv.name, DURATION.reports[venv.name]))
